@@ -22,4 +22,7 @@ public class User {
 
     @Column(unique = true)
     private String email;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<Task> tasks;
 }
