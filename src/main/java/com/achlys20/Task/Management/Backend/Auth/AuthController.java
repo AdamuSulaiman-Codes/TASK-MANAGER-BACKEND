@@ -5,11 +5,9 @@ import com.achlys20.Task.Management.Backend.Auth.dto.LoginRequest;
 import com.achlys20.Task.Management.Backend.Auth.dto.SignUpRequest;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")

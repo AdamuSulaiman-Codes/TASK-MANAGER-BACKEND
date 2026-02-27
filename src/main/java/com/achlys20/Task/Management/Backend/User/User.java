@@ -1,9 +1,12 @@
 package com.achlys20.Task.Management.Backend.User;
 
+import com.achlys20.Task.Management.Backend.Task.Task;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
