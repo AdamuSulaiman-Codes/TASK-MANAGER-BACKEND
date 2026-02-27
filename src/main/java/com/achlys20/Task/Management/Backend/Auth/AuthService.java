@@ -47,6 +47,12 @@ public class AuthService {
             throw new AuthException("Invalid UserName or Password");
         }
 
+        UserResponse userResponse = new UserResponse();
+
+        userResponse.setId(user.getId());
+        userResponse.setUserName(user.getUserName());
+        userResponse.setEmail(user.getEmail());
+
         String token = jwtService.generateToken(user.getUserName());
 
         return new AuthResponse(token);
