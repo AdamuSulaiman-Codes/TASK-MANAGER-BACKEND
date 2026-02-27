@@ -7,6 +7,7 @@ import com.achlys20.Task.Management.Backend.Auth.dto.SignUpRequest;
 import com.achlys20.Task.Management.Backend.Config.JwtService;
 import com.achlys20.Task.Management.Backend.User.User;
 import com.achlys20.Task.Management.Backend.User.UserRepository;
+import com.achlys20.Task.Management.Backend.User.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
