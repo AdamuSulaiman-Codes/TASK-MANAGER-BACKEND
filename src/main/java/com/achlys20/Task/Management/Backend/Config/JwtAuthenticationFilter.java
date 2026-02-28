@@ -1,7 +1,5 @@
 package com.achlys20.Task.Management.Backend.Config;
 
-
-
 import com.achlys20.Task.Management.Backend.User.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,6 +18,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtService jwtService;
 
@@ -61,7 +60,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        // always continue filter chain
         filterChain.doFilter(request, response);
     }
 }
