@@ -41,7 +41,8 @@ public class TaskService {
             task.getDueDate(),
             task.getPriority(),
             task.getStatus(),
-            task.getUser().getId()
+            task.getProject().getId(),
+            task.getAssignee().getId()
         )).toList();
     }
 
