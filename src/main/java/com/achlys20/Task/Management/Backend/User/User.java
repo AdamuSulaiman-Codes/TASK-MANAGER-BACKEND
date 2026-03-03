@@ -28,4 +28,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Task> tasks;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }
