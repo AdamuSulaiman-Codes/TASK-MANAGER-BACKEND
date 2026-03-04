@@ -53,8 +53,17 @@ public class TaskService {
     }
 
     @Transactional
-    public void updateUserTask(TaskRequest taskRequest, Long taskId) {
-        Task task = taskRepository.findById(taskId).orElseThrow(()-> new TaskException("task does not exist"));
+    public void updateUserTask(TaskRequest taskRequest, Long taskId, String userName) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new TaskException("Task does not exist"));
+
+        if (task.getAssignee() == null) {
+            throw new TaskException("Task has no assignee");
+        }
+
+        if (!task.getAssignee().getUserName().equals(userName)) {
+            throw new TaskException("You are not allowed to update this task");
+        }
 
         task.setTitle(taskRequest.getTitle());
         task.setDescription(taskRequest.getDescription());
