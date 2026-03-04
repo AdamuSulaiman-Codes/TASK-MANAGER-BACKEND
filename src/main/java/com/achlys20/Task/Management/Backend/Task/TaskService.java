@@ -49,6 +49,21 @@ public class TaskService {
     public void deleteUserTask(Long taskId) {
         Task task = taskRepository.findById(taskId).orElseThrow(()-> new TaskException("task does not exist"));
 
+        if (task.getProject() == null) {
+            throw new TaskException("Task is not linked to any project");
+        }
+
+        Project project = task.getProject();
+
+        if (project.getLead() == null) {
+            throw new TaskException("Project has no lead assigned");
+        }
+
+        if (!project.getLead().getUserName().equals(userName)) {
+            throw new TaskException("You are not allowed to delete this task");
+        }
+
+
         taskRepository.delete(task);
     }
 
