@@ -87,4 +87,11 @@ public class TaskService {
         task.setStatus(taskRequest.getStatus());
 
     }
+
+    public List<Task> getProjectTask(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new TaskException("Project does not exist"));
+
+        return project.getTasks();
+    }
 }
