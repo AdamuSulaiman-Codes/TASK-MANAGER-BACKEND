@@ -41,4 +41,10 @@ public class TaskController {
         taskService.updateUserTask(taskRequest, taskId);
         return ResponseEntity.ok("success");
     }
+
+    @GetMapping("/project-task/{projectId}")
+    public ResponseEntity<List<TaskRequest>> getProjectTask(@PathVariable Long projectId){
+        List<TaskRequest> taskRequests = taskService.getProjectTask(projectId);
+        return new ResponseEntity<>(taskRequests, HttpStatus.OK);
+    }
 }
