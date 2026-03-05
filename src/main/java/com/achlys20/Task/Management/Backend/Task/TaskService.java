@@ -1,5 +1,9 @@
 package com.achlys20.Task.Management.Backend.Task;
 
+import com.achlys20.Task.Management.Backend.Notification.NotificationService;
+import com.achlys20.Task.Management.Backend.Project.Exception.ProjectException;
+import com.achlys20.Task.Management.Backend.Project.Project;
+import com.achlys20.Task.Management.Backend.Project.ProjectRepository;
 import com.achlys20.Task.Management.Backend.Task.Exception.TaskException;
 import com.achlys20.Task.Management.Backend.Task.dto.TaskRequest;
 import com.achlys20.Task.Management.Backend.User.User;
@@ -15,10 +19,16 @@ import java.util.List;
 public class TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
+    private final NotificationService notificationService;
 
-    public void addNewTask(TaskRequest taskRequest, Long userId) {
-        User user = userRepository.findById(userId)
+    public void addNewTask(TaskRequest taskRequest, Long projectId, Long assigneeId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectException("project not found"));
+
+        User user = userRepository.findById(assigneeId)
                 .orElseThrow(() -> new TaskException("unable to find user"));
+
 
         Task task = new Task();
         task.setTitle(taskRequest.getTitle());
@@ -26,13 +36,22 @@ public class TaskService {
         task.setPriority(taskRequest.getPriority());
         task.setStatus(taskRequest.getStatus());
         task.setDueDate(taskRequest.getDueDate());
-        task.setUser(user);
+        task.setAssignee(user);
+        task.setProject(project);
 
         taskRepository.save(task);
+
+        notificationService.sendTaskAssignedNotification(
+                user,
+                "You have been assigned a new task: " + task.getTitle()
+        );
     }
 
-    public List<TaskRequest> getUserTask(Long userId) {
-        List<Task> tasks = taskRepository.findByUserId(userId);
+    public List<TaskRequest> getUserTask(String userName) {
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new TaskException("User not found"));
+
+        List<Task> tasks = taskRepository.findByAssigneeId(user.getId());
 
         return tasks.stream().map(task -> new TaskRequest(
             task.getId(),
@@ -46,7 +65,7 @@ public class TaskService {
         )).toList();
     }
 
-    public void deleteUserTask(Long taskId) {
+    public void deleteUserTask(Long taskId, String userName) {
         Task task = taskRepository.findById(taskId).orElseThrow(()-> new TaskException("task does not exist"));
 
         if (task.getProject() == null) {
@@ -88,10 +107,21 @@ public class TaskService {
 
     }
 
-    public List<Task> getProjectTask(Long projectId) {
+    public List<TaskRequest> getProjectTask(Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new TaskException("Project does not exist"));
 
-        return project.getTasks();
+        List<Task> tasks = project.getTasks();
+
+        return tasks.stream().map(task -> new TaskRequest(
+                task.getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getDueDate(),
+                task.getPriority(),
+                task.getStatus(),
+                task.getProject().getId(),
+                task.getAssignee().getId()
+        )).toList();
     }
 }

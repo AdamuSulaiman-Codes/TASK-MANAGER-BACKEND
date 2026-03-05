@@ -1,17 +1,18 @@
 package com.achlys20.Task.Management.Backend.User;
 
-import com.achlys20.Task.Management.Backend.Task.Task;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "users")
 public class User {
     @Id
@@ -26,13 +27,6 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    private List<Task> tasks;
-
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    @ManyToOne
-    @JoinColumn(name = "assignee_id")
-    private User assignee;
 }

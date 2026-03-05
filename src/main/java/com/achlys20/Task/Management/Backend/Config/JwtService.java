@@ -1,5 +1,6 @@
 package com.achlys20.Task.Management.Backend.Config;
 
+import com.achlys20.Task.Management.Backend.User.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -18,7 +19,7 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    public String generateToken(String userName) {
+    public String generateToken(User user) {
         return Jwts.builder()
                 .setSubject(user.getUserName())
                 .claim("role", user.getRole().name())
