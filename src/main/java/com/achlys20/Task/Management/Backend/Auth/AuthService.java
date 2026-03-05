@@ -33,6 +33,7 @@ public class AuthService {
         user.setUserName(signUpRequest.getUserName());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        user.setRole(signUpRequest.getRole());
 
         userRepository.save(user);
 
@@ -42,7 +43,7 @@ public class AuthService {
         userResponse.setUserName(user.getUserName());
         userResponse.setEmail(user.getEmail());
 
-        String token = jwtService.generateToken(user.getUserName());
+        String token = jwtService.generateToken(user);
 
         return new AuthResponse(token, userResponse);
     }
@@ -60,7 +61,7 @@ public class AuthService {
         userResponse.setUserName(user.getUserName());
         userResponse.setEmail(user.getEmail());
 
-        String token = jwtService.generateToken(user.getUserName());
+        String token = jwtService.generateToken(user);
 
         return new AuthResponse(token, userResponse);
     }

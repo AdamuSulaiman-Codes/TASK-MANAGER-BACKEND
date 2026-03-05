@@ -1,5 +1,6 @@
 package com.achlys20.Task.Management.Backend.Task;
 
+import com.achlys20.Task.Management.Backend.Project.Project;
 import com.achlys20.Task.Management.Backend.User.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,10 @@ public class Task {
     private Status status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "project_id")
+    private Project project;
+
+    @ManyToOne
+    @JoinColumn(name = "assignee_id")
+    private User assignee;
 }

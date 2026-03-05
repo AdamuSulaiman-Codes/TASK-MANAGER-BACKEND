@@ -18,5 +18,6 @@ public class TaskRequest {
     private LocalDate dueDate;
     private Priority priority;
     private Status status;
-    private Long userId;
+    private Long productId;
+    private Long assigneeId;
 }

@@ -20,11 +20,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found")
                 );
+        String role = "ROLE_" + user.getRole().name();
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUserName(),
                 user.getPassword(),
-                List.of(new SimpleGrantedAuthority("USER"))
+                List.of(new SimpleGrantedAuthority(role))
         );
     }
 }
