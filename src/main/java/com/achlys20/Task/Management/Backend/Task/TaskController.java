@@ -16,15 +16,15 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping("/add-task/{userId}")
-    public ResponseEntity<String> addTask(@RequestBody TaskRequest taskRequest){
-        taskService.addNewTask(taskRequest);
-        return new ResponseEntity<>("success", HttpStatus.CREATED);
+    public ResponseEntity<String> addTask(@RequestBody TaskRequest taskRequest, @PathVariable Long userId){
+        taskService.addNewTask(taskRequest, userId);
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
     @GetMapping("/get-user-task/{userId}")
     public ResponseEntity<List<TaskRequest>> getUserTask(@PathVariable Long userId){
         List<TaskRequest> taskRequests = taskService.getUserTask(userId);
-        return new ResponseEntity<>(taskRequests, HttpStatus.CREATED);
+        return new ResponseEntity<>(taskRequests, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete-user-task/{taskId}")

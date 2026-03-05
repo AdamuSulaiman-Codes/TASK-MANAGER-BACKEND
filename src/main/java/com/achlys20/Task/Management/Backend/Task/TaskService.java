@@ -16,18 +16,16 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
-    public void addNewTask(TaskRequest taskRequest) {
-        User user = userRepository.findById(taskRequest.getUserId())
-                .orElseThrow(() -> new TaskException("unable to add user"));
+    public void addNewTask(TaskRequest taskRequest, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new TaskException("unable to find user"));
 
         Task task = new Task();
-
         task.setTitle(taskRequest.getTitle());
         task.setDescription(taskRequest.getDescription());
         task.setPriority(taskRequest.getPriority());
         task.setStatus(taskRequest.getStatus());
         task.setDueDate(taskRequest.getDueDate());
-
         task.setUser(user);
 
         taskRepository.save(task);
