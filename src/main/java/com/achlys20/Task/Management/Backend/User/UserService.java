@@ -26,4 +26,24 @@ public class UserService {
 
         return userRequests;
     }
+    public void seedUsers() {
+
+        for (int i = 11; i <= 20; i++) {
+
+            User user = new User();
+
+            user.setUserName("user" + i);
+            user.setEmail("user" + i + "@example.com");
+
+            user.setPassword(passwordEncoder.encode("password" + i));
+
+            if (i % 3 == 0) {
+                user.setRole(Role.LEAD);
+            } else {
+                user.setRole(Role.MEMBER);
+            }
+
+            userRepository.save(user);
+        }
+    }
 }
