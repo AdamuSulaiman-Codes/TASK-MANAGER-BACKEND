@@ -11,23 +11,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/task")
 @RequiredArgsConstructor
 public class TaskController {
     private final TaskService taskService;
 
-
     @PreAuthorize("hasRole('LEAD')")
     @PostMapping("/add-task/{projectId}/{assigneeId}")
-    public ResponseEntity<String> addTask(@RequestBody TaskRequest taskRequest, @PathVariable Long projectId, @PathVariable Long assigneeId){
+    public ResponseEntity<String> addTask(@RequestBody TaskRequest taskRequest, @PathVariable Long projectId,
+            @PathVariable Long assigneeId) {
         taskService.addNewTask(taskRequest, projectId, assigneeId);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('MEMBER')")
     @GetMapping("/get-user-task")
-    public ResponseEntity<List<TaskRequest>> getUserTask(Authentication authentication){
+    public ResponseEntity<List<TaskRequest>> getUserTask(Authentication authentication) {
         List<TaskRequest> taskRequests = taskService.getUserTask(authentication.getName());
         return new ResponseEntity<>(taskRequests, HttpStatus.OK);
     }
@@ -44,15 +43,14 @@ public class TaskController {
     public ResponseEntity<String> updateUserTask(
             @PathVariable Long taskId,
             @RequestBody TaskRequest taskRequest,
-            Authentication authentication
-    ) {
+            Authentication authentication) {
         taskService.updateUserTask(taskRequest, taskId, authentication.getName());
         return ResponseEntity.ok("success");
     }
 
-    @PreAuthorize("hasRole('LEAD'), hasRole('MEMBER')")
+    @PreAuthorize("hasRole('LEAD') or hasRole('MEMBER')")
     @GetMapping("/project-task/{projectId}")
-    public ResponseEntity<List<TaskRequest>> getProjectTask(@PathVariable Long projectId){
+    public ResponseEntity<List<TaskRequest>> getProjectTask(@PathVariable Long projectId) {
         List<TaskRequest> taskRequests = taskService.getProjectTask(projectId);
         return new ResponseEntity<>(taskRequests, HttpStatus.OK);
     }

@@ -85,4 +85,23 @@ public class ProjectService {
 
         projectRepository.save(project);
     }
+
+    public List<ProjectRequest> getLeadProjects(Long leadId) {
+        List<Project> projects = projectRepository.findByLeadId(leadId);
+
+
+        return projects.stream().map(project -> new ProjectRequest(
+                        project.getId(),
+                        project.getName(),
+                        project.getDescription(),
+                        project.getLead().getId(),
+                        project.getMembers()
+                                .stream()
+                                .map(user -> user.getId())
+                                .collect(Collectors.toSet()),
+                        project.getCreatedAt(),
+                        project.getUpdatedAt()
+                ))
+                .collect(Collectors.toList());
+    }
 }

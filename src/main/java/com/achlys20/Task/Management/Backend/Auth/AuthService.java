@@ -20,11 +20,11 @@ public class AuthService {
     private final JwtService jwtService;
 
     public AuthResponse signUpNewUser(SignUpRequest signUpRequest) {
-        if(userRepository.findByUserName(signUpRequest.getUserName()).isPresent()){
+        if (userRepository.findByUserName(signUpRequest.getUserName()).isPresent()) {
             throw new AuthException("UserName Already Exists");
         }
 
-        if(userRepository.findByUserName(signUpRequest.getEmail()).isPresent()){
+        if (userRepository.findByEmail(signUpRequest.getEmail()).isPresent()) {
             throw new AuthException("Email Already Exists");
         }
 
@@ -42,6 +42,7 @@ public class AuthService {
         userResponse.setId(user.getId());
         userResponse.setUserName(user.getUserName());
         userResponse.setEmail(user.getEmail());
+        userResponse.setRole(user.getRole());
 
         String token = jwtService.generateToken(user);
 
@@ -49,9 +50,10 @@ public class AuthService {
     }
 
     public AuthResponse loginUser(LoginRequest loginRequest) {
-        User user = userRepository.findByUserName(loginRequest.getUserName()).orElseThrow(()-> new AuthException("Invalid UserName or Password"));
+        User user = userRepository.findByUserName(loginRequest.getUserName())
+                .orElseThrow(() -> new AuthException("Invalid UserName or Password"));
 
-        if(!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())){
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new AuthException("Invalid UserName or Password");
         }
 
@@ -60,6 +62,7 @@ public class AuthService {
         userResponse.setId(user.getId());
         userResponse.setUserName(user.getUserName());
         userResponse.setEmail(user.getEmail());
+        userResponse.setRole(user.getRole());
 
         String token = jwtService.generateToken(user);
 
@@ -70,10 +73,6 @@ public class AuthService {
         User user = userRepository.findByUserName(username)
                 .orElseThrow(() -> new AuthException("User not found"));
 
-        return new UserResponse(
-                user.getId(),
-                user.getUserName(),
-                user.getEmail()
-        );
+        return new UserResponse(user.getId(), user.getUserName(), user.getEmail(), user.getRole());
     }
 }

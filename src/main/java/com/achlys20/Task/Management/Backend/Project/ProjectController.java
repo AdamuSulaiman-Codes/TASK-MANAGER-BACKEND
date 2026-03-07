@@ -28,6 +28,12 @@ public class ProjectController {
         return new ResponseEntity<>(projectRequests, HttpStatus.OK);
     }
 
+    @GetMapping("/lead-projects/{leadID}")
+    public ResponseEntity<List<ProjectRequest>> getLeadProjects(@PathVariable Long leadId){
+        List<ProjectRequest> leadProjects = projectService.getLeadProjects(leadId);
+        return new ResponseEntity<>(leadProjects, HttpStatus.OK);
+    }
+
     @PreAuthorize("hasRole('LEAD')")
     @PostMapping("/add-new-member/{projectId}/{assigneeId}")
     public ResponseEntity<String> addMemberToProject(@PathVariable Long projectId ,@PathVariable Long assigneeId){
